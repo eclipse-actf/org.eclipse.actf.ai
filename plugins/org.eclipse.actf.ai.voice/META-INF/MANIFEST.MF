@@ -12,5 +12,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.actf.ai.tts,
  org.eclipse.actf.ai.voice,
  org.eclipse.actf.ai.voice.preferences.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Automatic-Module-Name: org.eclipse.actf.ai.voice
