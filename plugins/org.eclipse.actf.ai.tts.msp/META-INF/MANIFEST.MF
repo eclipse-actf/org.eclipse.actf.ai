@@ -11,4 +11,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.actf.util.win32,
  org.eclipse.actf.ai.voice
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.eclipse.actf.ai.tts.msp

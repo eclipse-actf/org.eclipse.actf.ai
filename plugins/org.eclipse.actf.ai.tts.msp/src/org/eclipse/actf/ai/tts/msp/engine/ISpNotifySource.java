@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007 IBM Corporation and Others
+ * Copyright (c) 2007, 2019 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,6 +13,7 @@ package org.eclipse.actf.ai.tts.msp.engine;
 import org.eclipse.actf.ai.voice.IVoiceEventListener;
 import org.eclipse.actf.util.win32.COMUtil;
 import org.eclipse.swt.internal.Callback;
+import org.eclipse.swt.internal.ole.win32.COM;
 import org.eclipse.swt.internal.ole.win32.GUID;
 import org.eclipse.swt.internal.ole.win32.IDispatch;
 import org.eclipse.swt.ole.win32.OLE;
@@ -37,11 +38,11 @@ public class ISpNotifySource extends IDispatch {
 	public static final int SPEI_VISEME = 8;
 	public static final int SPEI_TTS_AUDIO_LEVEL = 9;
 
-	private int address;
+	private long address;
 	private Callback callback = null;
 	private IVoiceEventListener eventListener = null;
 
-	public ISpNotifySource(int address) {
+	public ISpNotifySource(long address) {
 		super(address);
 		this.address = address;
 		callback = new Callback(this, "SAPINotifyCallback", 2); //$NON-NLS-1$
@@ -50,7 +51,7 @@ public class ISpNotifySource extends IDispatch {
 	}
 
 	public static ISpNotifySource getNotifySource(ISpVoice dispatch) {
-		int[] ppv = new int[1];
+		long[] ppv = new long[1];
 		if (OLE.S_OK == dispatch.QueryInterface(IID, ppv)) {
 			return new ISpNotifySource(ppv[0]);
 		}
@@ -61,7 +62,7 @@ public class ISpNotifySource extends IDispatch {
 		this.eventListener = eventListener;
 	}
 
-	int SAPINotifyCallback(int wParam, int lParam) {
+	long SAPINotifyCallback(long wParam, long lParam) {
 		SpEvent se = new SpEvent();
 		try {
 			while (OLE.S_OK == GetEvent(se.getAddress())) {
@@ -114,9 +115,9 @@ public class ISpNotifySource extends IDispatch {
 		return 0;
 	}
 
-	public int SetNotifyCallbackFunction(int pCallbackAddress, int wParam,
+	public int SetNotifyCallbackFunction(long pCallbackAddress, int wParam,
 			int lParam) {
-		return COMUtil.VtblCall(5, address, pCallbackAddress, wParam, lParam);
+		return COM.VtblCall(5, address, pCallbackAddress, wParam, lParam);
 	}
 
 	public int SetInterest(int eventInterest, int queuedInterest) {
@@ -124,7 +125,7 @@ public class ISpNotifySource extends IDispatch {
 				0x40000000 | queuedInterest, 2);
 	}
 
-	public int GetEvent(int pSPEVENTAddress) {
-		return COMUtil.VtblCall(11, address, 1, pSPEVENTAddress, 0);
+	public int GetEvent(long pSPEVENTAddress) {
+		return COM.VtblCall(11, address, 1, pSPEVENTAddress, 0);
 	}
 }

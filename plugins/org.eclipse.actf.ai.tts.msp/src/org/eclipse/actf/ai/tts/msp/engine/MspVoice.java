@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2007, 2012 IBM Corporation and Others
+ * Copyright (c) 2007, 2019 IBM Corporation and Others
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -95,7 +95,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 			});
 	
 	public MspVoice() {
-		int pv = COMUtil.createDispatch(ISpVoice.IID);
+		long pv = COMUtil.createDispatch(ISpVoice.IID);
 		dispSpVoice = new ISpVoice(pv);
 		varSapiVoice = new Variant(dispSpVoice);
 		automation = varSapiVoice.getAutomation();
@@ -216,7 +216,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 
 	public void speak(String text, int sapiFlags) {
 		char[] data = (text + "\0").toCharArray(); //$NON-NLS-1$
-		int bstrText = MemoryUtil.SysAllocString(data);
+		long bstrText = MemoryUtil.SysAllocString(data);
 		try {
 			dispSpVoice.Speak(bstrText, sapiFlags);
 		} finally {
@@ -559,7 +559,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 	}
 
 	public boolean speakToFile(String text, File file) {
-		int pv = COMUtil.createDispatch(IID_SpFileStream);
+		long pv = COMUtil.createDispatch(IID_SpFileStream);
 		OleAutomation autoSpFileStream = null;
 		boolean speakToFileResult = false;
 
@@ -590,7 +590,7 @@ public class MspVoice implements ISAPIEngine, IPropertyChangeListener {
 			dispSpVoice.put_AudioOutputStream(pv);
 
 			char[] data = (text + "\0").toCharArray(); //$NON-NLS-1$
-			int bstrText = MemoryUtil.SysAllocString(data);
+			long bstrText = MemoryUtil.SysAllocString(data);
 
 			try {
 				dispSpVoice.Speak(bstrText, 0);
